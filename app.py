@@ -49,7 +49,7 @@ def process_document(config, topics_input=None):
 
                 parse_h2_titles, parse_meta_titles, links = html_parser.parse_google_results(topic.split(':')[0], [], [])
                 topic, link = document_creator.create_document_and_write_to_file(my_h1, output_my_headers, parse_meta_titles, parse_h2_titles, links)
-                logs.append(f"Статья «{topic}» — {link}")
+                logs.append({"topic": topic, "link": link})
 
             except Exception as e:
                 logging.error(f"Ошибка при обработке темы {topic}: {e}")

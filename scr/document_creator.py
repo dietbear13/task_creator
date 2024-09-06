@@ -44,7 +44,7 @@ class DocumentCreator:
         content_section = f"Содержание текста\n{output_my_headers}\n\n"
         competitors_section = f"У конкурентов:\n{'\n'.join(parse_h2)}\n"
         technical_requirements_section = "Технические требования\nОбъем текста от X слов. Объем может быть больше или меньше, главное – раскрыть тему полностью, но без воды.\nУникальность по text.ru от 85%.\nИзбегаем речевого мусора, канцеляритов и вводных слов.\n"
-        examples_section = f"Примеры текстов:\n"
+        examples_section = f"Примеры текстов:"
 
         pattern = title_section + content_section + competitors_section + technical_requirements_section + examples_section
 
