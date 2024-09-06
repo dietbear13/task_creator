@@ -64,13 +64,22 @@
         {% if logs %}
         <div class="mt-4">
             <h2>Документы:</h2>
-            <div class="card">
-                <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Тема</th>
+                        <th>Ссылка</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {% for log in logs %}
-                    <p>{{ log }}</p>
+                    <tr>
+                        <td>{{ log.topic }}</td>
+                        <td><a href="{{ log.link }}" target="_blank">{{ log.link }}</a></td>
+                    </tr>
                     {% endfor %}
-                </div>
-            </div>
+                </tbody>
+            </table>
             <a href="{{ url_for('index') }}" class="btn btn-primary">Вернуться к генерации</a>
         </div>
         {% endif %}
@@ -86,6 +95,27 @@
             document.getElementById('key-group').classList.add('hidden');
             document.getElementById('folder-group').classList.add('hidden');
             document.getElementById('instruction-group').classList.add('hidden');
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let topics = document.getElementById('topics').value.split('\n');
+            let progressBar = document.createElement('div');
+            progressBar.className = 'progress';
+
+            let progress = document.createElement('div');
+            progress.className = 'progress-bar progress-bar-striped progress-bar-animated';
+            progress.style.width = '0%';
+
+            progressBar.appendChild(progress);
+            document.body.appendChild(progressBar);
+
+            topics.forEach((topic, index) => {
+                setTimeout(() => {
+                    progress.style.width = `${((index + 1) / topics.length) * 100}%`;
+                }, 1000 * index);
+            });
         }
     </script>
 </body>

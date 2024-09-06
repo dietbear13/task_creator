@@ -14,7 +14,7 @@ DEFAULT_CONFIG_PATH = "C:\\Users\\dietb\\PycharmProjects\\Saiga_70B\\tasks_creat
 
 # Словарь с именами и соответствующими ключами
 KEYS = {
-    "Миша": "C:\\Users\\dietb\\PycharmProjects\\Saiga_70B\\small-talk-ntfx-9398733134f9.json",  # замените "C:\\path\\to\\key1.json" на реальный путь к ключу
+    "Миша": "C:\\Users\\dietb\\PycharmProjects\\Saiga_70B\\small-talk-ntfx-6249008399f7.json",  # замените "C:\\path\\to\\key1.json" на реальный путь к ключу
     "Паша": "C:\\path\\to\\key2.json"   # замените "C:\\path\\to\\key2.json" на реальный путь к ключу
 }
 
@@ -36,17 +36,23 @@ def process_document(config, topics_input=None):
 
     for topic in topics:
         if topic:
-            my_h1 = topic.split(': ')[0]
-            my_h2_titles = topic.split(': ')[1]
-            my_h2_splited = my_h2_titles.split(', ')
+            try:
 
-            output_my_headers = f"H1 содержит «{my_h1.capitalize()}»\n"
-            for my_h2_title in my_h2_splited:
-                output_my_headers += f"H2: {my_h2_title.capitalize()}\n"
+                my_h1 = topic.split(': ')[0]
+                my_h2_titles = topic.split(': ')[1]
+                my_h2_splited = my_h2_titles.split(', ')
+                logging.info(f"Обрабатываем: {topic}")
 
-            parse_h2_titles, parse_meta_titles, links = html_parser.parse_google_results(topic.split(':')[0], [], [])
-            topic, link = document_creator.create_document_and_write_to_file(my_h1, output_my_headers, parse_meta_titles, parse_h2_titles, links)
-            logs.append(f"Статья «{topic}» — {link}")
+                output_my_headers = f"H1 содержит «{my_h1.capitalize()}»\n"
+                for my_h2_title in my_h2_splited:
+                    output_my_headers += f"H2: {my_h2_title.capitalize()}\n"
+
+                parse_h2_titles, parse_meta_titles, links = html_parser.parse_google_results(topic.split(':')[0], [], [])
+                topic, link = document_creator.create_document_and_write_to_file(my_h1, output_my_headers, parse_meta_titles, parse_h2_titles, links)
+                logs.append(f"Статья «{topic}» — {link}")
+
+            except Exception as e:
+                logging.error(f"Ошибка при обработке темы {topic}: {e}")
 
     logging.debug("Document processing completed")
     return logs

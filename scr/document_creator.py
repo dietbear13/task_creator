@@ -4,6 +4,7 @@ from googleapiclient.discovery import build
 import pandas as pd
 from datetime import datetime
 
+
 class DocumentCreator:
     def __init__(self, service_account_key_path, folder_id):
         self.service_account_key_path = service_account_key_path
@@ -14,6 +15,7 @@ class DocumentCreator:
 
     def get_credentials(self):
         if os.path.exists(self.service_account_key_path):
+            print(f"service_account_key_path {self.service_account_key_path}")
             return service_account.Credentials.from_service_account_file(self.service_account_key_path)
         else:
             raise FileNotFoundError("Service account key file not found.")
@@ -182,8 +184,9 @@ class DocumentCreator:
 
         file = self.drive_service.files().get(fileId=file_id, fields='parents').execute()
         previous_parents = ",".join(file.get('parents'))
-        file = self.drive_service.files().update(fileId=document_id, addParents=self.folder_id, removeParents=previous_parents,
-                                            fields='id, parents').execute()
+        file = self.drive_service.files().update(fileId=document_id, addParents=self.folder_id,
+                                                 removeParents=previous_parents,
+                                                 fields='id, parents').execute()
         link = f"https://docs.google.com/document/d/{file.get('id')}"
 
         try:
