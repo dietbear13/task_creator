@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор ТЗ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            display: none; /* Скрываем лоадер по умолчанию */
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Генерация документов</h1>
+        <form id="generate-form" action="{{ url_for('generate') }}" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
+            {% if not logs %}
+            <div class="form-group" id="key-group">
+                <label for="selected_key">Выбери ключ Google Drive:</label>
+                <select class="form-control" id="selected_key" name="selected_key">
+                    {% for name, key in keys.items() %}
+                        <option value="{{ name }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group" id="folder-group">
+                <label for="folder_id">ID папки Google Drive (выдать права для сервисной почты):</label>
+                <input type="text" class="form-control" id="folder_id" name="folder_id" value="{{ config.folder_id }}">
+            </div>
+            <div class="form-group" id="instruction-group">
+                <ul>
+                    <label for="topics">
+                        <li>Вводи темы построчно в формате «ВЧ-информационный запрос: желаемый h2 заголовок 1, желаемый h2 заголовок 2 и т.д.».</li>
+                    </label>
+                    <label for="topics">
+                        <li><b>Пример:</b><br> Какую выбрать кошку: лучшие породы кошек, как порода влияет на поведение, советы по выбору кошки от эксперта </li>
+                    </label>
+                    <label for="topics">
+                        <li><b>Двоеточие и запятые с пробелом</b> обязательны, это разделители.</li>
+                    </label>
+                    <textarea class="form-control" id="topics" name="topics" rows="10" placeholder="Введите темы построчно через Enter..."></textarea>
+                </ul>
+            </div>
+            <button type="submit" class="btn btn-primary">Сгенерировать</button>
+            <div class="loader" id="loader"></div>
+            {% endif %}
+        </form>
+        {% if logs %}
+        <div class="mt-4">
+            <h2>Документы:</h2>
+            <div class="card">
+                <div class="card-body">
+                    {% for log in logs %}
+                    <p>{{ log }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">Вернуться к генерации</a>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Bootstrap JS и зависимости -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function showLoader() {
+            document.querySelector('button[type="submit"]').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('key-group').classList.add('hidden');
+            document.getElementById('folder-group').classList.add('hidden');
+            document.getElementById('instruction-group').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
