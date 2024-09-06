@@ -65,14 +65,14 @@ class DocumentCreator:
         # print(f'Content section length: {self.utf16len(content_section)}')
         # print(f'Competitors section length: {self.utf16len(competitors_section)}')
         # print(f'Technical requirements section length: {self.utf16len(technical_requirements_section)}')
-        # print(f'Examples section length: {self.utf16len(examples_section)}')
+        print(f'Examples section length: {self.utf16len(examples_section)}')
         #
         # print(f'Pattern: {pattern}')
         # print(f'Title section: {title_section}')
         # print(f'Content section: {content_section}')
         # print(f'Competitors section: {competitors_section}')
         # print(f'Technical requirements section: {technical_requirements_section}')
-        # print(f'Examples section: {examples_section}')
+        print(f'Examples section: {examples_section}')
 
         # Добавляем буллеты
         start_index = self.utf16len(pattern[:pattern.index("Title в выдаче:") + len("Title в выдаче: ")])
@@ -115,13 +115,13 @@ class DocumentCreator:
                     'location': {
                         'index': pattern_length
                     },
-                    'text': f"{item}\n",
+                    'text': f"\n{item}\n",
                 }
             })
             pattern_length += self.utf16len(item) + 1
 
         # Обновление стилей заголовков
-        headings = ["Содержание текста", "У конкурентов:", "Технические требования", "Примеры текстов:\n"]
+        headings = ["Содержание текста", "У конкурентов:", "Технические требования", "Примеры текстов:"]
         for heading in headings:
             start_index = self.utf16len(pattern[:pattern.index(heading)])
             end_index = start_index + self.utf16len(heading)
@@ -129,7 +129,7 @@ class DocumentCreator:
                 'updateParagraphStyle': {
                     'range': {
                         'startIndex': start_index + 1,
-                        'endIndex': end_index
+                        'endIndex': end_index + 1
                     },
                     'paragraphStyle': {
                         'namedStyleType': 'HEADING_2',
